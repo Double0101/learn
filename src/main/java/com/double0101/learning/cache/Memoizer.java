@@ -12,8 +12,15 @@ public class Memoizer<A, V> implements Computable<A, V> {
 
     private final Map<A, Future<V>> cache = new ConcurrentHashMap<A, Future<V>>();
     private final Computable<A, V> c;
+    private final ComputeService<V> service;
 
     public Memoizer(Computable<A, V> c) {
+        service = new ComputeService<V>();
+        this.c = c;
+    }
+    
+    public Memoizer(Computable<A, V> c, int nThreads) {
+        service = new ComputeService<V>(nThreads);
         this.c = c;
     }
 
@@ -26,10 +33,10 @@ public class Memoizer<A, V> implements Computable<A, V> {
                 }
             };
             FutureTask<V> ft = new FutureTask<V>(eval);
-            cache.putIfAbsent(arg, ft);
+            f = cache.putIfAbsent(arg, ft);
             if (f == null) {
                 f = ft;
-                ft.run();
+                service.execute(ft);
             }
         }
         try {
