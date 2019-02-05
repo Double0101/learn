@@ -35,14 +35,15 @@ public class Memoizer<A, V> implements Computable<A, V> {
             FutureTask<V> ft = new FutureTask<V>(eval);
             f = cache.putIfAbsent(arg, ft);
             if (f == null) {
-                f = ft;
-                service.execute(ft);
+                f = service.submit(ft);
             }
         }
         try {
             return f.get();
         } catch (ExecutionException e) {
             throw launcherThrowable(e.getCause());
+        } finally {
+            f.cancel(true);
         }
     }
 
