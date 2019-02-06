@@ -57,6 +57,6 @@ public class Memoizer<A, V> implements Computable<A, V> {
     }
 
     public void shutDown() {
-        
+        service.shutdown();
     }
 }
