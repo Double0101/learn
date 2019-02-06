@@ -35,7 +35,7 @@ public class Memoizer<A, V> implements Computable<A, V> {
             FutureTask<V> ft = new FutureTask<V>(eval);
             f = cache.putIfAbsent(arg, ft);
             if (f == null) {
-                f = service.submit(ft);
+                f = (Future<V>) service.submit(ft);
             }
         }
         try {
@@ -54,5 +54,9 @@ public class Memoizer<A, V> implements Computable<A, V> {
             throw (Error) t;
         else
             throw new IllegalStateException("Not unchecked", t);
+    }
+
+    public void shutDown() {
+        
     }
 }
