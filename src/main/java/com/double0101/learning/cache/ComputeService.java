@@ -3,7 +3,6 @@ package com.double0101.learning.cache;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 
 public class ComputeService<V> {
     private static final int DEFAULT_NTHREADS = 20;
@@ -17,7 +16,7 @@ public class ComputeService<V> {
         executor = Executors.newFixedThreadPool(nThreads);
     }
 
-    public Future<V> submit(FutureTask<V> task) {
+    public Future<V> submit(Runnable task) {
         return (Future<V>) executor.submit(task);
     }
 }
