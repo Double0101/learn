@@ -1,4 +1,4 @@
-package com.double0101.learning.buffer;
+package com.double0101.learning.buffer.base;
 
 public abstract class BaseBoundedBuffer<V> {
     private final V[] buf;
